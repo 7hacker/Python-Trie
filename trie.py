@@ -4,7 +4,7 @@ from cmd import Cmd
 
 class Node:
 	def __init__(self, name):
-		self.word = None
+		self.entry = None
 		self.nodes = {}
 		self.name = name
 
@@ -21,25 +21,27 @@ class Trie:
 			else:
 				trav.nodes[word[i]] = Node(word[i])
 				trav = trav.nodes[word[i]]
-		trav.word = word
+		trav.entry = True
 
 
-	def _get_suggestion(self, n, ret):
+	def _get_suggestion(self, n, ret, path):
 		if not n:
 			return
-		if n.word:
-			ret.append(n.word)
+		if n.entry:
+			ret.append(path)
 		if n.nodes:
 			for k in n.nodes:
-				self._get_suggestion(n.nodes[k], ret)
+				self._get_suggestion(n.nodes[k], ret, path + n.nodes[k].name)
 
 	def get_suggestion(self, preword):
 		trav = self.root
 		ret = []
+		path = ""
 		for i in range(len(preword)):
 			if preword[i] in trav.nodes:
 				trav = trav.nodes[preword[i]]
-		self._get_suggestion(trav, ret)
+				path = path + trav.name
+		self._get_suggestion(trav, ret, path)
 		return ret
 
 
@@ -48,8 +50,8 @@ class Trie:
 			return
 		else:
 			print(n.name)
-			if n.word:
-				print(n.word)
+			if n.entry:
+				print(n.entry)
 			for k in n.nodes:
 				self._print_trie(n.nodes[k])
 
@@ -63,8 +65,8 @@ def visualizeTrie(root):
 		return
 	else:
 		visualizeTrie.track(name=root.name)
-		if root.word:
-			visualizeTrie.track(word=root.word)
+		if root.entry:
+			visualizeTrie.track(word=root.entry)
 		child_list = []
 		for k in root.nodes:
 			child_list.append(root.nodes[k].name)
@@ -76,7 +78,6 @@ def add_dictionaryWords(t, dictionarypath):
 	fl = open(dictionarypath)
 	lines = fl.readlines()
 	for l in lines:
-		#print("Adding word: " + l.rstrip())
 		t.add_word(l.rstrip())
 
 
