@@ -106,6 +106,12 @@ class MyPrompt(Cmd):
 			for suggestion in l:
 				print(suggestion)
 
+	def complete_suggest(self, text, line, start_index, end_index):
+		if text:
+			return t.get_suggestion(text)
+		else:
+			return []
+
 
 t = Trie()
 if __name__ == '__main__':
