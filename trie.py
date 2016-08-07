@@ -1,10 +1,11 @@
 from rcviz import callgraph, viz
 from cmd import Cmd
+import sys
 
 
 class Node:
 	def __init__(self, name):
-		self.entry = None
+		self.entry = False
 		self.nodes = {}
 		self.name = name
 
@@ -45,18 +46,19 @@ class Trie:
 		return ret
 
 
-	def _print_trie(self, n):
+	def _print_trie(self, n, path):
 		if not n:
 			return
 		else:
-			print(n.name)
 			if n.entry:
-				print(n.entry)
+				print(path + n.name)
 			for k in n.nodes:
-				self._print_trie(n.nodes[k])
+				tmp = path
+				self._print_trie(n.nodes[k], tmp + n.name)
 
 	def print_trie(self):
-		self._print_trie(self.root)
+		for r in self.root.nodes:
+			self._print_trie(self.root.nodes[r], "")
 		return
 
 @viz
@@ -84,11 +86,14 @@ def add_dictionaryWords(t, dictionarypath):
 class MyPrompt(Cmd):
 	def do_hello(self, args):
 		"""Says hello. If you provide a name, it will greet you with it."""
+		namel = []
 		if len(args) == 0:
-		    name = 'stranger'
+		    namel.append('stranger')
 		else:
-		    name = args
-		print "Hello, %s" % name
+			for n in args.split():
+				namel.append(n)
+		for n in namel:
+			print "Hello, %s" % n
 
 	def do_quit(self, args):
 		"""Quits the program."""
@@ -99,6 +104,19 @@ class MyPrompt(Cmd):
 		"""Makes a trie with /usr/share/dict/words"""
 		add_dictionaryWords(t, "/usr/share/dict/words")
 		print("Done creating Trie!")
+
+	def do_insert(self,args):
+		"""Insert a word into a trie"""
+		if len(args) != 0:
+			for w in args.split():
+				t.add_word(w.rstrip())
+
+			#for a in args:
+			#	t.add_word(a.rstrip())
+
+	def do_seeTrie(self, args):
+		"""See your Trie. Warning:if you have a large trie, expect a large output!"""
+		t.print_trie()
 
 	def do_suggest(self, args):
 		"""Ask the trie for suggestions by inputing some prefix"""
