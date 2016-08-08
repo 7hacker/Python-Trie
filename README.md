@@ -1,11 +1,17 @@
 # Python-Trie
+--------------
 
 A simple trie with a command line interface + auto-complete for suggestions of a prefix query
 
-commands:
+commands
+---------
 
-maketrie: Will make a trie using the dictionary words at /usr/share/dict/words
+maketrie: make a trie using the dictionary words at /usr/share/dict/words
 
-suggest: Will take an argument and return any words that can be formed using the argument as prefix by looking up the trie. suggest will autocomplete upon [TAB]
+insert: add words that follow into the trie
+
+seeTrie: See the words that are in the trie
+
+suggest: Get suggestions that can be formed using some input prefix. Can also autocomplete upon [TAB]
 
 

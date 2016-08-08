@@ -9,7 +9,6 @@ class Node:
 		self.nodes = {}
 		self.name = name
 
-
 class Trie:
 	def __init__(self):
 		self.root = Node("root")
@@ -23,7 +22,6 @@ class Trie:
 				trav.nodes[word[i]] = Node(word[i])
 				trav = trav.nodes[word[i]]
 		trav.entry = True
-
 
 	def _get_suggestion(self, n, ret, path):
 		if not n:
@@ -136,4 +134,4 @@ t = Trie()
 if __name__ == '__main__':
 	prompt = MyPrompt()
 	prompt.prompt = '> '
-	prompt.cmdloop('Starting Trie Player...')
+	prompt.cmdloop('Starting Trie Shell...')
