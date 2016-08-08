@@ -1,13 +1,12 @@
-from rcviz import callgraph, viz
 from cmd import Cmd
 import sys
 
 
 class Node:
 	def __init__(self, name):
-		self.entry = False
-		self.nodes = {}
-		self.name = name
+		self.entry = False #if True, a word can be formed following path from root to this node
+		self.nodes = {} #dictionary of nodes that exist at this node, with key = letter
+		self.name = name #letter at this node
 
 class Trie:
 	def __init__(self):
@@ -43,7 +42,6 @@ class Trie:
 		self._get_suggestion(trav, ret, path)
 		return ret
 
-
 	def _print_trie(self, n, path):
 		if not n:
 			return
@@ -59,21 +57,6 @@ class Trie:
 			self._print_trie(self.root.nodes[r], "")
 		return
 
-@viz
-def visualizeTrie(root):
-	if not root:
-		return
-	else:
-		visualizeTrie.track(name=root.name)
-		if root.entry:
-			visualizeTrie.track(word=root.entry)
-		child_list = []
-		for k in root.nodes:
-			child_list.append(root.nodes[k].name)
-			visualizeTrie(root.nodes[k])
-		visualizeTrie.track(children=child_list)
-
-
 def add_dictionaryWords(t, dictionarypath):
 	fl = open(dictionarypath)
 	lines = fl.readlines()
@@ -82,17 +65,6 @@ def add_dictionaryWords(t, dictionarypath):
 
 
 class MyPrompt(Cmd):
-	def do_hello(self, args):
-		"""Says hello. If you provide a name, it will greet you with it."""
-		namel = []
-		if len(args) == 0:
-		    namel.append('stranger')
-		else:
-			for n in args.split():
-				namel.append(n)
-		for n in namel:
-			print "Hello, %s" % n
-
 	def do_quit(self, args):
 		"""Quits the program."""
 		print "Quitting."
@@ -108,9 +80,6 @@ class MyPrompt(Cmd):
 		if len(args) != 0:
 			for w in args.split():
 				t.add_word(w.rstrip())
-
-			#for a in args:
-			#	t.add_word(a.rstrip())
 
 	def do_seeTrie(self, args):
 		"""See your Trie. Warning:if you have a large trie, expect a large output!"""
@@ -128,7 +97,6 @@ class MyPrompt(Cmd):
 			return t.get_suggestion(text)
 		else:
 			return []
-
 
 t = Trie()
 if __name__ == '__main__':
