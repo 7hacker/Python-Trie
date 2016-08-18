@@ -1,7 +1,5 @@
 from cmd import Cmd
 import sys
-from bitarray import bitarray
-
 
 class Node:
     def __init__(self, name):
